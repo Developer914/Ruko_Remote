@@ -4,14 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.roku.screens.onboarding.OnboardingScreen
+import androidx.compose.ui.platform.LocalContext
+import com.example.roku.navigation.NavHostContainer
 import com.example.roku.ui.theme.RokuTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +16,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RokuTheme {
-                OnboardingScreen()
+                val applicationContext = LocalContext.current.applicationContext
+                NavHostContainer(applicationContext)
             }
         }
     }

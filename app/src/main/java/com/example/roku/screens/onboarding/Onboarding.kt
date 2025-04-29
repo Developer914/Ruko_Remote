@@ -1,6 +1,7 @@
 package com.example.roku.screens.onboarding
 
 
+import android.content.Context
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,18 +35,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
 import com.example.roku.R
+import com.example.roku.navigation.NavDestinations
 import com.example.roku.resources.descriptions
 import com.example.roku.ui.theme.BackgroundColor
 import com.example.roku.ui.theme.DotColor
 import com.example.roku.ui.theme.MainColor
+import com.example.roku.util.ext.AppPrefes
 import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
 import com.tbuonomo.viewpagerdotsindicator.compose.model.DotGraphic
 import com.tbuonomo.viewpagerdotsindicator.compose.type.WormIndicatorType
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 
 @Composable
-fun OnboardingScreen() {
+fun OnboardingScreen(context: Context, navController: NavController) {
     val pageCount by remember { mutableIntStateOf(5) }
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { pageCount })
     Column(
@@ -78,13 +83,13 @@ fun OnboardingScreen() {
                 .offset(y = (-20).dp)
                 .zIndex(1f)
         ) {
-            ContentLayout(pageCount,pagerState)
+            ContentLayout(navController, pageCount, pagerState)
         }
     }
 }
 
 @Composable
-fun ContentLayout(pageCount: Int, pagerState: PagerState) {
+fun ContentLayout(navController: NavController, pageCount: Int, pagerState: PagerState) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -95,7 +100,7 @@ fun ContentLayout(pageCount: Int, pagerState: PagerState) {
             descriptions[pagerState.currentPage].details
         )
 
-        ContinueButton(pagerState,pageCount, descriptions[pagerState.currentPage].btnTxt)
+        ContinueButton(navController, pagerState,pageCount, descriptions[pagerState.currentPage].btnTxt)
         WormDotIndicators(pageCount, pagerState)
     }
 }
@@ -155,7 +160,7 @@ fun Descriptions(heading : String, details : String) {
 }
 
 @Composable
-fun ContinueButton(pagerState: PagerState, pageCount: Int, btnTxt: String) {
+fun ContinueButton(navController: NavController, pagerState: PagerState, pageCount: Int, btnTxt: String) {
     val scope = rememberCoroutineScope()
 
     Box(
@@ -168,6 +173,13 @@ fun ContinueButton(pagerState: PagerState, pageCount: Int, btnTxt: String) {
                             page = pagerState.currentPage + 1,
                             animationSpec = tween(durationMillis = 400) // slower animation
                         )
+                    }else{
+                        AppPrefes.setOnboardingVisited(true)
+                        navController.navigate(NavDestinations.HOME_SCREEN) {
+                            popUpTo(NavDestinations.ONBOARDING_SCREEN) {
+                                inclusive = true
+                            }
+                        }
                     }
                 }
             }
@@ -219,8 +231,8 @@ private fun WormDotIndicators(pageCount: Int, pagerState: PagerState) {
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-private fun Preview() {
-    OnboardingScreen()
-}
+//@Preview(showSystemUi = true)
+//@Composable
+//private fun Preview() {
+//    OnboardingScreen()
+//}
