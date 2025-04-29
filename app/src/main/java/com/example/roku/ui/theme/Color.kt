@@ -11,5 +11,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val BackgroundColor = Color(0xFF000000)
+val SelectTabColor = Color(0xFFFFFFFF)
+val UnSelectTabColor = Color(0xFF858585)
 val MainColor = Color(0xFF391282)
 val DotColor = Color(0xFFCBCBCB)
