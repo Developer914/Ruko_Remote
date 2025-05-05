@@ -14,24 +14,16 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,22 +42,25 @@ fun RemoteScreen() {
                 color = BackgroundColor
             )
     ) {
-        PadSelectorBar()
+        val selectedTab = remember { mutableIntStateOf(0) }
+        PadSelectorBar(selectedTab)
         RemoteButtonsLayout()
+        MainControlLayout(selectedTab.intValue)
+        BackAndHomeButtonLayout()
+        SocialMediaButtonLayout()
     }
 }
 
 @SuppressLint("AutoboxingStateValueProperty")
 @Composable
-fun PadSelectorBar() {
-    val selectedTab = remember { mutableIntStateOf(0) }
-    DialTouchTab(selectedTab.intValue) { selectedTabIndex ->
+fun PadSelectorBar(selectedTab: MutableIntState) {
+    DialAndTouchTab(selectedTab.intValue) { selectedTabIndex ->
         selectedTab.intValue = selectedTabIndex
     }
 }
 
 @Composable
-fun DialTouchTab(
+fun DialAndTouchTab(
     selectedTab: Int,
     onTabSelected: (Int) -> Unit
 ) {
@@ -184,11 +179,102 @@ fun FourthRowOfButtonsLayout() {
 }
 
 @Composable
-fun RemoteButton(remoteImage : Int, description : String) {
+fun RemoteButton(remoteImage: Int, description: String) {
     Image(
         painter = painterResource(remoteImage),
         contentDescription = description
     )
+}
+
+@Composable
+fun SocialMediaButton(socialMediaImage: Int, description: String) {
+    Image(
+        painter = painterResource(socialMediaImage),
+        contentDescription = description
+    )
+}
+
+@Composable
+fun MainControlLayout(selectedTab: Int) {
+    when(selectedTab){
+        0 -> {
+            DialPad()
+        }
+
+        1 -> {
+            TouchPad()
+        }
+    }
+}
+
+@Composable
+fun DialPad() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 15.dp
+            ),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_main_button),
+            contentDescription = "Dile Pad"
+        )
+    }
+}
+
+@Composable
+fun TouchPad() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 15.dp
+            ),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_touch_pad),
+            contentDescription = "Touch Pad"
+        )
+    }
+}
+
+@Composable
+fun BackAndHomeButtonLayout() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 15.dp,
+                start = 30.dp,
+                end = 30.dp
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        RemoteButton(R.drawable.ic_back_space_button, "back space button")
+
+        RemoteButton(R.drawable.ic_home_button, "home button")
+    }
+}
+
+@Composable
+fun SocialMediaButtonLayout() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 18.dp,
+                start = 30.dp,
+                end = 30.dp
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        SocialMediaButton(R.drawable.ic_netflix, "Netflix")
+
+        SocialMediaButton(R.drawable.ic_youtube, "YouTube")
+    }
 }
 
 

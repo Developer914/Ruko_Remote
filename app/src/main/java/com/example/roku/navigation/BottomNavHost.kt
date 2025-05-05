@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.roku.screens.devices.DevicesScreen
 import com.example.roku.screens.remote.RemoteScreen
 
 @Composable
@@ -20,10 +21,10 @@ fun BottomNavHost(
         navController = bottomNavController,
         startDestination = NavDestinations.REMOTE_SCREEN
     ) {
-//        composable(
-//            route = NavDestinations.DISCOVER_SCREEN,
-//            content = { DiscoverScreen(applicationContext, navController) }
-//        )
+        composable(
+            route = NavDestinations.DEVICES,
+            content = { DevicesScreen() }
+        )
         composable(
             route = NavDestinations.REMOTE_SCREEN,
             content = {
